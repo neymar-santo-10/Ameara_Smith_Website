@@ -1,0 +1,1090 @@
+/* ============================================================================
+   STYLES.CSS  —  layout & components
+   ----------------------------------------------------------------------------
+   Every colour / size / duration here comes from tokens.css.
+   If you want to change how the site LOOKS, edit tokens.css first.
+   Edit this file when you want to change how the site is LAID OUT.
+
+   Contents
+     01  Reset & base
+     02  Typography primitives
+     03  Layout helpers
+     04  Motion — the reveal system
+     05  Header & navigation
+     06  Hero
+     07  Section furniture
+     08  About
+     09  Focus cards
+     10  Experience timeline
+     11  Education & credentials
+     12  Service list
+     13  Contact
+     14  Footer
+     15  Buttons & links
+     16  Print
+============================================================================ */
+
+/* ---------------------------------------------------------------------------
+   01  RESET & BASE
+--------------------------------------------------------------------------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--c-bg);
+  color: var(--c-body);
+  font-family: var(--font-body);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+::selection {
+  background: var(--pms-539);
+  color: #fff;
+}
+
+/* Visible keyboard focus everywhere. Never remove this. */
+:focus-visible {
+  outline: 2px solid var(--c-focus);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+.on-navy :focus-visible { outline-color: var(--c-focus-inverse); }
+
+.skip-link {
+  position: absolute;
+  left: var(--s-2);
+  top: -100%;
+  z-index: 200;
+  padding: var(--s-1) var(--s-2);
+  background: var(--pms-539);
+  color: #fff;
+  font-size: var(--t-small);
+  text-decoration: none;
+  transition: top var(--dur-fast) var(--ease-out);
+}
+.skip-link:focus { top: var(--s-2); }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   02  TYPOGRAPHY PRIMITIVES
+--------------------------------------------------------------------------- */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--c-heading);
+  font-weight: 600;
+  margin: 0;
+  text-wrap: balance;      /* stops orphan words on headlines */
+}
+
+h2 {
+  font-size: var(--t-h2);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-h2);
+}
+
+h3 {
+  font-size: var(--t-h3);
+  line-height: 1.34;
+  letter-spacing: -0.006em;
+}
+
+p { margin: 0 0 var(--s-2); max-width: var(--w-text); }
+p:last-child { margin-bottom: 0; }
+
+/* The small letterspaced caps used above every section heading. */
+.eyebrow {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--t-label);
+  font-weight: 600;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--c-accent);
+  margin: 0 0 var(--s-2);
+}
+.on-navy .eyebrow { color: var(--c-accent-inverse); }
+
+.lead {
+  font-size: var(--t-lead);
+  line-height: 1.62;
+  color: var(--c-heading);
+  font-weight: 400;
+}
+
+.meta {
+  font-size: var(--t-small);
+  color: var(--c-body);
+  letter-spacing: 0.005em;
+}
+
+/* Numerals in dates/tables should align in columns. */
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* ---------------------------------------------------------------------------
+   03  LAYOUT HELPERS
+--------------------------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: var(--w-page);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section {
+  padding-block: var(--s-section);
+  scroll-margin-top: var(--header-h);   /* so anchors clear the fixed header */
+  position: relative;
+}
+
+/* Hairline between sections on paper. */
+.section + .section { border-top: var(--rule) solid var(--c-line-soft); }
+
+.on-navy {
+  background: var(--c-bg-inverse);
+  color: var(--c-body-inverse);
+  border-top: 0 !important;
+}
+.on-navy h2,
+.on-navy h3 { color: var(--c-heading-inverse); }
+
+/* ---------------------------------------------------------------------------
+   04  MOTION — THE REVEAL SYSTEM
+   ---------------------------------------------------------------------------
+   Design rules being followed here (Nielsen Norman Group, scroll-fading):
+     · reveal ONCE, never re-hide on scroll-up  (JS unobserves after firing)
+     · short travel — 14px, not 60px
+     · one thing at a time — siblings stagger by 70ms, capped at 6 steps
+     · reduced travel on small screens (NN/g advises against heavy mobile fades)
+     · fully disabled under prefers-reduced-motion
+
+   Usage:  add  data-reveal  to any element.
+           add  data-reveal-group  to a parent to auto-stagger its children.
+--------------------------------------------------------------------------- */
+
+/* `.js` is set by main.js. Without JS everything is simply visible —
+   the page must never depend on script to show its content. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, var(--reveal-lift), 0);
+  transition:
+    opacity   var(--dur-reveal) var(--ease-out),
+    transform var(--dur-reveal) var(--ease-out);
+  transition-delay: calc(var(--d, 0) * var(--stagger));
+  will-change: opacity, transform;
+}
+
+.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* The gold hairline that draws itself in. Used under section headings. */
+.rule {
+  display: block;
+  width: 56px;
+  height: 2px;
+  background: var(--c-accent);
+  border: 0;
+  margin: var(--s-3) 0 0;
+  transform-origin: left center;
+}
+.on-navy .rule { background: var(--c-accent-inverse); }
+
+.js .rule[data-reveal] {
+  transform: translate3d(0, 0, 0) scaleX(0);
+  transition: transform 1150ms var(--ease-out);
+  transition-delay: calc(var(--d, 0) * var(--stagger) + 200ms);
+  opacity: 1;
+}
+.js .rule[data-reveal].is-visible { transform: scaleX(1); }
+
+/* --- Masked line reveal (hero name) -------------------------------------
+   Each line sits in an overflow-hidden box; the inner span slides up into
+   view. This is the one "showy" animation on the site, and it fires once,
+   on load, above the fold.                                                */
+.line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;   /* buffer so descenders are never clipped */
+  margin-bottom: -0.08em;
+}
+.line__inner {
+  display: block;
+  transform: translate3d(0, 105%, 0);
+  transition: transform 1300ms var(--ease-out);
+  transition-delay: calc(var(--d, 0) * 190ms);
+}
+.is-loaded .line__inner { transform: translate3d(0, 0, 0); }
+
+/* No JS? Show the name immediately. */
+html:not(.js) .line__inner { transform: none; }
+
+/* Reduced travel on phones — the same 34px lift feels like a lurch on a
+   small viewport, and there's less room for it. Still well above the old 6px. */
+@media (max-width: 640px) {
+  :root { --reveal-lift: 16px; --stagger: 90ms; }
+}
+
+/* The accessibility escape hatch. Everything above becomes inert. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  .js [data-reveal],
+  .js [data-reveal].is-visible,
+  .js .rule[data-reveal],
+  .js .rule[data-reveal].is-visible {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .line__inner { transform: none !important; transition: none !important; }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   05  HEADER & NAVIGATION
+--------------------------------------------------------------------------- */
+.site-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border-bottom: var(--rule) solid transparent;
+  transition:
+    background-color var(--dur-base) var(--ease-soft),
+    border-color     var(--dur-base) var(--ease-soft),
+    box-shadow       var(--dur-base) var(--ease-soft);
+}
+
+/* Applied by JS once the hero has scrolled past. */
+.site-header.is-scrolled {
+  background: rgba(250, 249, 246, 0.88);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+          backdrop-filter: saturate(180%) blur(12px);
+  border-bottom-color: var(--c-line);
+  box-shadow: var(--shadow-nav);
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+
+/* Wordmark ---------------------------------------------------------------- */
+.brand {
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color var(--dur-base) var(--ease-soft);
+}
+.brand__last { font-weight: 400; }
+.is-scrolled .brand { color: var(--c-heading); }
+
+/* Links ------------------------------------------------------------------- */
+.nav { display: flex; align-items: center; gap: clamp(1rem, 2.2vw, 2.1rem); }
+
+.nav__link {
+  position: relative;
+  font-size: var(--t-small);
+  font-weight: 450;
+  letter-spacing: 0.012em;
+  color: rgba(255, 255, 255, 0.82);
+  text-decoration: none;
+  padding-block: 0.35rem;
+  transition: color var(--dur-fast) var(--ease-soft);
+}
+.is-scrolled .nav__link { color: var(--c-body); }
+
+/* Underline grows from the left on hover / when the section is in view. */
+.nav__link::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%; height: 1px;
+  background: var(--c-accent-inverse);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.is-scrolled .nav__link::after { background: var(--c-accent); }
+
+.nav__link:hover,
+.nav__link[aria-current="true"] { color: #fff; }
+.is-scrolled .nav__link:hover,
+.is-scrolled .nav__link[aria-current="true"] { color: var(--c-heading); }
+
+.nav__link:hover::after,
+.nav__link[aria-current="true"]::after { transform: scaleX(1); }
+
+/* Mobile toggle ----------------------------------------------------------- */
+.nav-toggle {
+  display: none;
+  width: 44px; height: 44px;
+  margin-right: -10px;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: #fff;
+}
+.is-scrolled .nav-toggle { color: var(--c-heading); }
+
+.nav-toggle__bar {
+  display: block;
+  width: 22px; height: 1.5px;
+  margin: 5px auto;
+  background: currentColor;
+  transition: transform var(--dur-base) var(--ease-out),
+              opacity   var(--dur-fast) var(--ease-soft);
+}
+.is-open .nav-toggle__bar:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.is-open .nav-toggle__bar:nth-child(2) { opacity: 0; }
+.is-open .nav-toggle__bar:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+@media (max-width: 860px) {
+  .nav-toggle { display: block; }
+
+  /* When the panel is open the header bar has to match it, or you get a
+     navy strip sitting on top of a paper-coloured menu. */
+  .site-header.is-open {
+    background: var(--c-bg);
+    -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+    border-bottom-color: transparent;
+    box-shadow: none;
+  }
+  .site-header.is-open .brand,
+  .site-header.is-open .nav-toggle { color: var(--c-heading); }
+
+  .nav {
+    position: fixed;
+    inset: var(--header-h) 0 auto 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: var(--s-2) var(--gutter) var(--s-4);
+    background: var(--c-bg);
+    border-bottom: var(--rule) solid var(--c-line);
+    box-shadow: 0 18px 34px rgba(0, 38, 58, 0.10);
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity var(--dur-base) var(--ease-soft),
+                transform var(--dur-base) var(--ease-out),
+                visibility 0s linear var(--dur-base);
+  }
+  .is-open .nav {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+  }
+
+  .nav__link {
+    width: 100%;
+    padding-block: 0.85rem;
+    font-size: 1.0625rem;
+    color: var(--c-body) !important;
+    border-bottom: var(--rule) solid var(--c-line-soft);
+  }
+  .nav__link::after { display: none; }
+  .nav__link[aria-current="true"] { color: var(--c-heading) !important; font-weight: 600; }
+}
+
+/* ---------------------------------------------------------------------------
+   06  HERO
+--------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  min-height: min(94vh, 900px);
+  display: flex;
+  align-items: center;
+  padding-block: calc(var(--header-h) + var(--s-6)) var(--s-6);
+  background: var(--c-bg-inverse-deep);
+  color: var(--c-body-inverse);
+  overflow: hidden;
+}
+
+/* A very quiet lift in the upper-left so the navy isn't a flat slab.
+   Deliberately low-contrast — you should barely notice it. */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 90% at 12% 0%,  rgba(10, 51, 80, 0.85) 0%, rgba(0, 27, 41, 0) 62%),
+    linear-gradient(180deg, rgba(0, 38, 58, 0.55) 0%, rgba(0, 27, 41, 1) 100%);
+  pointer-events: none;
+}
+.hero > * { position: relative; z-index: 1; }
+
+/* --- Monogram -------------------------------------------------------------
+   Sits above the ::before gradient but below .container, which follows it in
+   source order at the same z-index. Selector is `.hero > .hero__monogram` so
+   it reliably beats the `.hero > *` rule above on specificity, not order.
+-------------------------------------------------------------------------- */
+.hero > .hero__monogram {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* Element opacity handles the entrance fade; the GROUP opacity inside
+     carries --monogram-strength. Keeping them on separate elements means
+     the two never fight over the same property. */
+  opacity: 0;
+  transition: opacity 2200ms var(--ease-soft) 300ms;
+}
+.is-loaded .hero > .hero__monogram { opacity: 1; }
+html:not(.js) .hero > .hero__monogram { opacity: 1; }
+
+.hero__monogram-ink {
+  fill: var(--monogram-ink);
+  opacity: var(--monogram-strength);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero > .hero__monogram { opacity: 1 !important; transition: none !important; }
+}
+
+.hero__inner { max-width: 960px; }
+
+.hero__kicker {
+  font-size: var(--t-label);
+  font-weight: 600;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--c-accent-inverse);
+  margin: 0 0 var(--s-3);
+}
+
+.hero__name {
+  font-size: var(--t-hero);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-hero);
+  font-weight: 400;
+  color: #fff;
+  margin: 0 0 var(--s-3);
+}
+.hero__name .line__inner { font-weight: 400; }
+.hero__name .line:last-child .line__inner {
+  font-weight: 600;
+  color: #fff;
+}
+
+.hero__rule {
+  width: 84px; height: 2px;
+  background: var(--c-accent-inverse);
+  border: 0;
+  margin: 0 0 var(--s-3);
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 1250ms var(--ease-out) 900ms;
+}
+.is-loaded .hero__rule { transform: scaleX(1); }
+html:not(.js) .hero__rule { transform: scaleX(1); }
+
+.hero__tagline {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 0.98rem + 0.85vw, 1.65rem);
+  line-height: 1.5;
+  font-weight: 300;
+  color: #E4E9EC;
+  max-width: 40ch;
+  margin: 0 0 var(--s-3);
+}
+
+.hero__affil {
+  font-size: var(--t-small);
+  color: var(--c-body-inverse);
+  letter-spacing: 0.02em;
+  margin: 0 0 var(--s-5);
+}
+.hero__affil span { color: var(--c-accent-inverse); margin-inline: 0.55em; }
+
+.hero__actions { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+
+/* Elements that fade in after the name, on load rather than on scroll. */
+.hero__fade {
+  opacity: 0;
+  transform: translate3d(0, 26px, 0);
+  transition: opacity 1000ms var(--ease-out), transform 1000ms var(--ease-out);
+  transition-delay: calc(950ms + var(--d, 0) * 150ms);
+}
+.is-loaded .hero__fade { opacity: 1; transform: none; }
+html:not(.js) .hero__fade { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__fade,
+  .hero__rule { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .hero__rule { transform: scaleX(1) !important; }
+}
+
+/* Scroll cue ---------------------------------------------------------------*/
+.hero__cue {
+  position: absolute;
+  left: 50%; bottom: var(--s-4);
+  transform: translateX(-50%);
+  z-index: 1;
+  font-size: 0.6875rem;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: rgba(195, 205, 212, 0.6);
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  opacity: 0;
+  transition: opacity 1100ms var(--ease-soft) 2200ms, color var(--dur-base);
+}
+.is-loaded .hero__cue { opacity: 1; }
+.hero__cue:hover { color: var(--c-accent-inverse); }
+.hero__cue::after {
+  content: "";
+  width: 1px; height: 34px;
+  background: linear-gradient(180deg, var(--c-accent-inverse), transparent);
+}
+@media (max-width: 860px) { .hero__cue { display: none; } }
+
+/* ---------------------------------------------------------------------------
+   07  SECTION FURNITURE
+--------------------------------------------------------------------------- */
+.section-head { margin-bottom: var(--s-5); max-width: var(--w-narrow); }
+.section-head p { margin-top: var(--s-3); }
+
+/* Two-column: sticky heading on the left, content on the right. */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(2rem, 1rem + 5vw, 5.5rem);
+  align-items: start;
+}
+.split__aside { position: sticky; top: calc(var(--header-h) + var(--s-4)); }
+
+@media (max-width: 900px) {
+  .split { grid-template-columns: 1fr; gap: var(--s-4); }
+  .split__aside { position: static; }
+}
+
+/* ---------------------------------------------------------------------------
+   08  ABOUT
+--------------------------------------------------------------------------- */
+.about__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  gap: clamp(2rem, 1rem + 4.5vw, 4.5rem);
+  align-items: start;
+}
+@media (max-width: 820px) {
+  .about__grid { grid-template-columns: 1fr; }
+}
+
+/* --- Portrait -------------------------------------------------------------
+   A matted print, the way a photograph is framed in chambers: white mat
+   board, a hairline fillet around the image itself, and a gold rule offset
+   behind it so the whole thing sits off the page rather than flat on it.
+   Squared corners on purpose — rounded reads casual.
+-------------------------------------------------------------------------- */
+.portrait {
+  position: relative;
+  max-width: 340px;
+  margin: 0;                       /* <figure> has a default margin */
+  --portrait-offset: 16px;
+}
+
+/* The gold rule behind the mat, pushed down-right. */
+.portrait::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: var(--portrait-offset)
+         calc(var(--portrait-offset) * -1)
+         calc(var(--portrait-offset) * -1)
+         var(--portrait-offset);
+  border: var(--rule) solid var(--c-accent);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* The mat board. */
+.portrait__frame {
+  position: relative;
+  z-index: 1;
+  padding: 10px;
+  background: var(--paper-raised);
+  border: var(--rule) solid var(--c-line);
+  box-shadow: 0 14px 34px rgba(0, 38, 58, 0.09);
+}
+
+.portrait img,
+.portrait__placeholder {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  /* The source is 2:3 and the frame is 4:5, so ~17% of the height is cropped.
+     Centred puts her eyeline at about a third down, which is where you want
+     it. Nudge this if you swap the photo: lower % shows more of the top. */
+  object-position: var(--portrait-focus, center);
+  background: var(--pms-5455);
+  /* Hairline fillet between mat and image — the detail that makes it read
+     as framed rather than as a photo with a white border. */
+  outline: var(--rule) solid rgba(0, 38, 58, 0.12);
+  outline-offset: calc(var(--rule) * -1);
+}
+
+/* Tighten the offset on narrow screens so the gold rule can't push past
+   the gutter (body clips overflow, but this avoids it being clipped). */
+@media (max-width: 480px) {
+  .portrait { --portrait-offset: 10px; max-width: calc(100% - 10px); }
+}
+
+/* Shown until a real photo is dropped in. Replace, don't restyle. */
+.portrait__placeholder {
+  display: grid;
+  place-content: center;
+  gap: 0.4rem;
+  text-align: center;
+  padding: var(--s-2);
+  border: 1px dashed var(--pms-cool-1);
+  color: var(--pms-cool-11);
+  font-size: var(--t-small);
+}
+.portrait__placeholder strong {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--c-heading);
+}
+.portrait__placeholder code {
+  font-size: 0.8125rem;
+  background: rgba(0, 38, 58, 0.06);
+  padding: 0.1em 0.4em;
+  border-radius: 2px;
+}
+
+.about__body > p + p { margin-top: 0; }
+
+/* "At a glance" key–value strip. */
+.facts {
+  margin: var(--s-4) 0 0;
+  padding: var(--s-3) 0 0;
+  border-top: var(--rule) solid var(--c-line);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--s-3) var(--s-4);
+}
+.facts div { min-width: 0; }
+.facts dt {
+  font-size: var(--t-label);
+  font-weight: 600;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--c-accent);
+  margin-bottom: 0.4rem;
+}
+.facts dd {
+  margin: 0;
+  font-size: var(--t-small);
+  line-height: 1.5;
+  color: var(--c-heading);
+}
+
+/* ---------------------------------------------------------------------------
+   09  FOCUS CARDS
+--------------------------------------------------------------------------- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr));
+  gap: 0;
+  border-top: var(--rule) solid var(--c-line-inverse);
+}
+
+/* Cards are separated by hairlines rather than boxes/shadows — quieter,
+   and it reads as a printed document rather than a SaaS dashboard. */
+.card {
+  padding: var(--s-4) clamp(1.25rem, 2.2vw, 2.25rem) var(--s-4) 0;
+  border-bottom: var(--rule) solid var(--c-line-inverse);
+  position: relative;
+}
+.card + .card { padding-left: clamp(1.25rem, 2.2vw, 2.25rem); }
+.card + .card::before {
+  content: "";
+  position: absolute;
+  left: 0; top: var(--s-4); bottom: var(--s-4);
+  width: var(--rule);
+  background: var(--c-line-inverse);
+}
+@media (max-width: 780px) {
+  .card,
+  .card + .card { padding-inline: 0; }
+  .card + .card::before { display: none; }
+}
+
+.card__num {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.14em;
+  color: var(--c-accent-inverse);
+  margin-bottom: var(--s-2);
+}
+.card h3 { margin-bottom: var(--s-1); }
+.card p {
+  font-size: var(--t-small);
+  line-height: 1.68;
+  color: var(--c-body-inverse);
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   10  EXPERIENCE TIMELINE
+--------------------------------------------------------------------------- */
+.timeline { list-style: none; margin: 0; padding: 0; }
+
+.entry {
+  position: relative;
+  padding: 0 0 var(--s-5) clamp(1.5rem, 3.4vw, 2.75rem);
+  border-left: var(--rule) solid var(--c-line);
+}
+.entry:last-child { padding-bottom: 0; border-left-color: transparent; }
+.entry:last-child::after {
+  /* keep the rule running only as far as the last node */
+  content: "";
+  position: absolute;
+  left: -1px; top: 0; height: 12px;
+  width: var(--rule);
+  background: var(--c-line);
+}
+
+/* The gold node on the rule. */
+.entry::before {
+  content: "";
+  position: absolute;
+  left: -4.5px; top: 8px;
+  width: 8px; height: 8px;
+  background: var(--c-bg);
+  border: 1.5px solid var(--c-accent);
+  border-radius: 50%;
+}
+
+.entry__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35rem var(--s-3);
+  margin-bottom: 0.35rem;
+}
+.entry__role { margin: 0; }
+.entry__dates {
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pms-cool-11);
+  white-space: nowrap;
+}
+.entry__org {
+  font-size: var(--t-small);
+  font-weight: 500;
+  color: var(--c-accent);
+  margin: 0 0 0.7rem;
+}
+.entry__org .sep { color: var(--pms-cool-1); margin-inline: 0.5em; font-weight: 400; }
+.entry__org .place { color: var(--pms-cool-11); font-weight: 400; }
+.entry p { font-size: var(--t-small); line-height: 1.7; }
+
+/* Small skill chips under an entry. */
+.tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: var(--s-2) 0 0; padding: 0; list-style: none; }
+.tags li {
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--pms-cool-11);
+  border: var(--rule) solid var(--c-line);
+  border-radius: 999px;
+  padding: 0.28em 0.75em;
+  background: var(--c-bg-raised);
+}
+
+/* Compact secondary list for non-legal roles. */
+.compact { list-style: none; margin: 0; padding: 0; }
+.compact li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem var(--s-2);
+  padding: 0.85rem 0;
+  border-bottom: var(--rule) solid var(--c-line-soft);
+  font-size: var(--t-small);
+}
+.compact li:first-child { border-top: var(--rule) solid var(--c-line-soft); }
+.compact .r { font-weight: 600; color: var(--c-heading); }
+.compact .o { color: var(--c-body); flex: 1 1 auto; }
+.compact .d {
+  color: var(--pms-cool-11);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8125rem;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+   11  EDUCATION & CREDENTIALS
+--------------------------------------------------------------------------- */
+.edu { list-style: none; margin: 0; padding: 0; }
+.edu > li {
+  padding: var(--s-3) 0;
+  border-bottom: var(--rule) solid var(--c-line);
+}
+.edu > li:first-child { padding-top: 0; }
+.edu > li:last-child { border-bottom: 0; padding-bottom: 0; }
+
+.edu__school {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.3rem var(--s-3);
+}
+.edu__degree { font-size: var(--t-small); color: var(--c-body); margin: 0.3rem 0 0; }
+.edu__note   { font-size: var(--t-small); color: var(--c-body); margin: 0.6rem 0 0; }
+
+.honors { list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem; margin: var(--s-2) 0 0; padding: 0; }
+.honors li {
+  font-size: 0.8125rem;
+  color: var(--c-heading);
+  background: rgba(0, 38, 58, 0.045);
+  border-radius: 2px;
+  padding: 0.3em 0.7em;
+}
+
+/* ---------------------------------------------------------------------------
+   12  SERVICE LIST
+--------------------------------------------------------------------------- */
+.service {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: var(--s-4) clamp(2rem, 4vw, 4rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.service li { border-top: 2px solid var(--c-accent); padding-top: var(--s-2); }
+.service h3 { margin-bottom: 0.15rem; }
+.service .meta { display: block; margin-bottom: 0.6rem; }
+.service p { font-size: var(--t-small); line-height: 1.68; }
+
+/* ---------------------------------------------------------------------------
+   13  CONTACT
+--------------------------------------------------------------------------- */
+.contact__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  gap: clamp(2rem, 1rem + 5vw, 5rem);
+  align-items: start;
+}
+@media (max-width: 820px) { .contact__grid { grid-template-columns: 1fr; } }
+
+.contact__lead {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 1.1rem + 1.2vw, 2rem);
+  line-height: 1.4;
+  font-weight: 300;
+  color: #fff;
+  margin-bottom: var(--s-3);
+}
+
+.channels { margin: 0; padding: 0; }
+.channels > div {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: var(--s-2);
+  align-items: baseline;
+  padding: var(--s-2) 0;
+  border-bottom: var(--rule) solid var(--c-line-inverse);
+}
+.channels > div:first-child { border-top: var(--rule) solid var(--c-line-inverse); }
+.channels dt {
+  font-size: var(--t-label);
+  font-weight: 600;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--c-accent-inverse);
+}
+.channels dd { margin: 0; color: #fff; }
+@media (max-width: 520px) {
+  .channels > div { grid-template-columns: 1fr; gap: 0.3rem; }
+}
+
+/* ---------------------------------------------------------------------------
+   14  FOOTER
+--------------------------------------------------------------------------- */
+.site-footer {
+  background: var(--c-bg-inverse-deep);
+  color: rgba(195, 205, 212, 0.72);
+  padding-block: var(--s-5) var(--s-4);
+  font-size: var(--t-small);
+  border-top: var(--rule) solid var(--c-line-inverse);
+}
+.site-footer .container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-4);
+  align-items: baseline;
+  justify-content: space-between;
+}
+.site-footer p { margin: 0; max-width: 62ch; }
+
+/* Required professional notice — see README. Keep it.
+   Selector is `.site-footer .disclaimer`, not `.disclaimer`, so it outranks
+   the `.site-footer p { max-width: 62ch }` above — otherwise that measure
+   clamps it to ~508px and it rides up onto the copyright row. */
+.site-footer .disclaimer {
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  color: rgba(195, 205, 212, 0.55);
+  margin-top: var(--s-3);
+  padding-top: var(--s-3);
+  border-top: var(--rule) solid rgba(179, 163, 105, 0.16);
+  /* 0 0 100% rather than flex-basis alone — flex-shrink would otherwise let
+     it squeeze back onto the previous row. */
+  flex: 0 0 100%;
+  max-width: none;
+}
+
+/* ---------------------------------------------------------------------------
+   15  BUTTONS & LINKS
+--------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.92rem 1.7rem;
+  font-family: var(--font-body);
+  font-size: var(--t-small);
+  font-weight: 500;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: var(--rule) solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-base) var(--ease-soft),
+    border-color     var(--dur-base) var(--ease-soft),
+    color            var(--dur-base) var(--ease-soft),
+    transform        var(--dur-fast) var(--ease-out);
+}
+.btn:active { transform: translateY(1px); }
+
+.btn--solid {
+  background: var(--c-accent-inverse);
+  border-color: var(--c-accent-inverse);
+  color: var(--pms-539);
+}
+.btn--solid:hover {
+  background: var(--c-accent-hover);
+  border-color: var(--c-accent-hover);
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: rgba(179, 163, 105, 0.5);
+  color: #fff;
+}
+.btn--ghost:hover {
+  border-color: var(--c-accent-inverse);
+  background: rgba(179, 163, 105, 0.1);
+}
+
+/* Inline links — underline sweeps in from the left on hover. */
+.link {
+  color: inherit;
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size var(--dur-base) var(--ease-out),
+              color var(--dur-fast) var(--ease-soft);
+  padding-bottom: 1px;
+}
+.link:hover { background-size: 100% 1px; }
+
+.on-navy .link,
+.site-footer .link { color: #fff; }
+.on-navy .link:hover,
+.site-footer .link:hover { color: var(--c-accent-inverse); }
+
+/* Links that are always underlined (contact details). */
+.link--static {
+  background-size: 100% 1px;
+  background-image: linear-gradient(var(--c-accent-inverse), var(--c-accent-inverse));
+}
+.link--static:hover { color: var(--c-accent-inverse); }
+
+/* ---------------------------------------------------------------------------
+   16  PRINT — a clean one-page résumé view if anyone hits Ctrl+P
+--------------------------------------------------------------------------- */
+@media print {
+  .site-header, .hero__cue, .hero__actions, .nav-toggle, .portrait { display: none !important; }
+  body { background: #fff; color: #000; font-size: 10.5pt; }
+  .hero, .on-navy, .site-footer {
+    background: #fff !important;
+    color: #000 !important;
+    min-height: 0;
+    padding-block: 1rem;
+  }
+  .hero::before { display: none; }
+  .hero__name, .on-navy h2, .on-navy h3, .contact__lead { color: #000 !important; }
+  .card p, .on-navy p, .site-footer { color: #333 !important; }
+  .section { padding-block: 1.1rem; break-inside: avoid; }
+  .entry { break-inside: avoid; }
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 8pt; color: #555; }
+}
