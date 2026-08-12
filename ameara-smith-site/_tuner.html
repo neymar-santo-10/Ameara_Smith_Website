@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" class="js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Monogram tuner — dev only</title>
+
+<!-- =============================================================
+     DEV TOOL — not part of the site. Delete _tuner.html before deploying.
+
+     Loads the REAL tokens.css + styles.css and the REAL hero markup, so what
+     you see here is exactly what the page does. Drag the slider until the
+     monogram looks right with her name on top of it, then copy the two
+     values it prints into tokens.css.
+============================================================= -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Source+Serif+4:opsz,wght@8..60,200..900&display=swap">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/styles.css">
+
+<style>
+  /* Bottom-LEFT by default: the monogram is anchored to the right edge, so
+     anything parked over there covers the exact thing you're judging.
+     Drag it by the title bar, collapse with the button, or hide the whole
+     thing with the H key. Position and state persist in localStorage. */
+  .panel {
+    position: fixed; z-index: 999; left: 16px; bottom: 16px; width: 290px;
+    background: #fff; border: 1px solid #D6D2C4; border-radius: 3px;
+    font: 13px/1.5 Inter, system-ui, sans-serif; color: #212322;
+    box-shadow: 0 10px 30px rgba(0,38,58,.22);
+    user-select: none;
+  }
+  .panel.is-hidden { display: none; }
+  .panel__bar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px; padding: 11px 10px 11px 16px; cursor: grab;
+    border-bottom: 1px solid #E8E5DD;
+  }
+  .panel__bar:active { cursor: grabbing; }
+  .panel h2 { font: 600 12px/1 Inter, sans-serif; letter-spacing: .14em;
+               text-transform: uppercase; color: #84754E; margin: 0; }
+  .panel__toggle {
+    border: 1px solid #D9D9D6; background: #fff; border-radius: 2px;
+    width: 24px; height: 24px; line-height: 1; cursor: pointer;
+    font: 600 14px Inter, sans-serif; color: #53565A; flex: none;
+  }
+  .panel__body { padding: 4px 16px 16px; }
+  .panel.is-collapsed .panel__body { display: none; }
+  .panel.is-collapsed .panel__bar { border-bottom: 0; }
+  .hint {
+    position: fixed; z-index: 999; left: 16px; bottom: 16px;
+    font: 11px Inter, sans-serif; color: rgba(195,205,212,.5);
+  }
+  .panel label { display: block; margin: 14px 0 5px; font-weight: 600; font-size: 12px; }
+  .panel input[type=range] { width: 100%; }
+  .swatches { display: flex; gap: 6px; flex-wrap: wrap; }
+  .swatches button {
+    flex: 1 1 auto; padding: 7px 4px; font: 600 11px Inter, sans-serif;
+    border: 1px solid #D9D9D6; background: #fff; border-radius: 2px; cursor: pointer;
+  }
+  .swatches button[aria-pressed="true"] { border-color: #00263A; background: #00263A; color: #fff; }
+  .readout {
+    margin-top: 14px; padding-top: 12px; border-top: 1px solid #E8E5DD;
+    font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: #53565A;
+    white-space: pre-wrap; word-break: break-all;
+  }
+  .readout b { color: #00263A; }
+  .delta { font-weight: 600; }
+</style>
+</head>
+<body class="is-loaded">
+
+<p class="hint" id="hint">press H to show the tuner</p>
+
+<div class="panel" id="panel">
+ <div class="panel__bar" id="bar">
+  <h2>Monogram tuner</h2>
+  <button class="panel__toggle" id="collapse" type="button" title="Collapse">–</button>
+ </div>
+ <div class="panel__body">
+
+  <label for="strength">Strength <span id="sVal">0.300</span></label>
+  <input type="range" id="strength" min="0" max="0.6" step="0.005" value="0.30">
+
+  <label>Ink</label>
+  <div class="swatches">
+    <button data-ink="#000000" data-hex="#000000" aria-pressed="true">Black</button>
+    <button data-ink="var(--pms-5455)" data-hex="#BFCED6" aria-pressed="false">5455 C</button>
+    <button data-ink="#FFFFFF" data-hex="#FFFFFF" aria-pressed="false">White</button>
+    <button data-ink="#001C2C" data-hex="#001C2C" aria-pressed="false">Figma</button>
+  </div>
+
+  <p style="margin:10px 0 0;font-size:11px;color:#53565A;line-height:1.45">
+    Dark inks need a much higher strength than light ones — you're pushing
+    against 41 units of headroom instead of 200.
+  </p>
+
+  <div class="readout" id="out"></div>
+ </div>
+</div>
+
+<!-- ---- the real hero, copied verbatim from index.html ---- -->
+<section class="hero on-navy" id="top">
+  <svg class="hero__monogram" viewBox="0 0 1703 864"
+       preserveAspectRatio="xMaxYMid slice" aria-hidden="true" focusable="false">
+    <g class="hero__monogram-ink">
+      <path fill-opacity=".25" d="M1199.38 -94H1653L2114 957H731L1199.38 -94Z"/>
+      <path fill-opacity=".35" d="M1257.47 47H1594L1936 828H910L1257.47 47Z"/>
+      <path fill-opacity=".5"  d="M1307.49 185H1542.33L1781 730H1065L1307.49 185Z"/>
+      <path fill-opacity=".6"  d="M1235.23 651L1362.73 301H1482.73L1609.73 651H1495.73L1476.23 588.5H1365.73L1346.23 651H1235.23ZM1387.23 505H1454.23L1421.23 405L1387.23 505Z"/>
+    </g>
+  </svg>
+
+  <div class="container">
+    <div class="hero__inner">
+      <p class="hero__kicker hero__fade" style="--d:0">International Relations &amp; Law</p>
+      <h1 class="hero__name">
+        <span class="line"><span class="line__inner" style="--d:0">Ameara</span></span>
+        <span class="line"><span class="line__inner" style="--d:1">Smith</span></span>
+      </h1>
+      <hr class="hero__rule">
+      <p class="hero__tagline hero__fade" style="--d:1">
+        Working toward a career in law at the intersection of gender justice,
+        human rights, and public policy.
+      </p>
+      <p class="hero__affil hero__fade" style="--d:2">
+        Georgetown University <span>·</span> School of Foreign Service <span>·</span> Class of 2028
+      </p>
+      <div class="hero__actions hero__fade" style="--d:3">
+        <a class="btn btn--solid" href="#">View experience</a>
+        <a class="btn btn--ghost" href="#">Get in touch</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var slider = document.getElementById('strength');
+  var sVal = document.getElementById('sVal');
+  var out = document.getElementById('out');
+  var ink = 'var(--pms-5455)', inkHex = '#BFCED6';
+
+  // Ground colour under the monogram, composited from the hero's own
+  // background + ::before gradient at roughly x 85% / y 50%.
+  var GROUND = [0, 30, 46];
+  // All four shapes stacked inside the group, before group opacity.
+  var COMBINED = 1 - (1 - .25) * (1 - .35) * (1 - .5) * (1 - .6);
+
+  function hex2rgb(h) {
+    h = h.replace('#', '');
+    return [0, 2, 4].map(function (i) { return parseInt(h.substr(i, 2), 16); });
+  }
+  function over(fg, a, bg) {
+    return fg.map(function (c, i) { return Math.round(a * c + (1 - a) * bg[i]); });
+  }
+  function maxDelta(a, b) {
+    return Math.max.apply(null, a.map(function (c, i) { return Math.abs(c - b[i]); }));
+  }
+
+  function render() {
+    var s = parseFloat(slider.value);
+    root.style.setProperty('--monogram-strength', s);
+    root.style.setProperty('--monogram-ink', ink);
+    sVal.textContent = s.toFixed(3);
+
+    var rgb = hex2rgb(inkHex);
+    var core = over(rgb, COMBINED * s, GROUND);
+    var outer = over(rgb, 0.25 * s, GROUND);
+    var dCore = maxDelta(core, GROUND), dOuter = maxDelta(outer, GROUND);
+
+    // Roughly where the reference sat. Under ~4 and it vanishes on cheaper
+    // screens; over ~16 and it stops reading as texture.
+    var verdict = dCore < 4 ? 'too faint'
+                : dCore > 16 ? 'too strong'
+                : 'in range';
+
+    out.innerHTML =
+      '--monogram-ink: <b>' + ink + '</b>;\n' +
+      '--monogram-strength: <b>' + s.toFixed(3) + '</b>;\n\n' +
+      'ground  rgb(' + GROUND.join(',') + ')\n' +
+      'core    rgb(' + core.join(',') + ')  Δ' + dCore + '\n' +
+      'outer   rgb(' + outer.join(',') + ')  Δ' + dOuter + '\n' +
+      '<span class="delta">' + verdict + '</span>';
+  }
+
+  slider.addEventListener('input', render);
+
+  [].forEach.call(document.querySelectorAll('.swatches button'), function (b) {
+    b.addEventListener('click', function () {
+      [].forEach.call(document.querySelectorAll('.swatches button'), function (o) {
+        o.setAttribute('aria-pressed', String(o === b));
+      });
+      ink = b.dataset.ink;
+      inkHex = b.dataset.hex;
+      render();
+    });
+  });
+
+  render();
+
+  /* --- Get out of the way -------------------------------------------------
+     Drag by the title bar, collapse with the button, hide entirely with H.
+     State persists so it stops re-covering things on every reload.        */
+  var panel = document.getElementById('panel');
+  var bar = document.getElementById('bar');
+  var hint = document.getElementById('hint');
+  var store = {
+    get: function () { try { return JSON.parse(localStorage.tuner || '{}'); } catch (e) { return {}; } },
+    set: function (o) { try { localStorage.tuner = JSON.stringify(o); } catch (e) {} }
+  };
+
+  function apply(st) {
+    panel.classList.toggle('is-collapsed', !!st.collapsed);
+    panel.classList.toggle('is-hidden', !!st.hidden);
+    hint.style.display = st.hidden ? '' : 'none';
+    document.getElementById('collapse').textContent = st.collapsed ? '+' : '–';
+    if (st.left != null) {
+      panel.style.left = st.left + 'px';
+      panel.style.top = st.top + 'px';
+      panel.style.bottom = 'auto';
+    }
+  }
+  var state = store.get();
+  apply(state);
+
+  document.getElementById('collapse').addEventListener('click', function () {
+    state.collapsed = !state.collapsed; store.set(state); apply(state);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'h' || e.key === 'H') {
+      if (/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) return;
+      state.hidden = !state.hidden; store.set(state); apply(state);
+    }
+  });
+
+  var drag = null;
+  bar.addEventListener('pointerdown', function (e) {
+    if (e.target.closest('.panel__toggle')) return;
+    var r = panel.getBoundingClientRect();
+    drag = { dx: e.clientX - r.left, dy: e.clientY - r.top };
+    bar.setPointerCapture(e.pointerId);
+  });
+  bar.addEventListener('pointermove', function (e) {
+    if (!drag) return;
+    var w = panel.offsetWidth, h = panel.offsetHeight;
+    // clamp so it can never be dragged off-screen and lost
+    state.left = Math.max(0, Math.min(innerWidth - w, e.clientX - drag.dx));
+    state.top  = Math.max(0, Math.min(innerHeight - h, e.clientY - drag.dy));
+    apply(state);
+  });
+  bar.addEventListener('pointerup', function () { drag = null; store.set(state); });
+})();
+</script>
+</body>
+</html>

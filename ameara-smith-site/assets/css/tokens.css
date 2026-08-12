@@ -1,0 +1,206 @@
+/* ============================================================================
+   TOKENS.CSS  —  THE BRAND FILE
+   ----------------------------------------------------------------------------
+   This is the only file you need to touch to re-skin the entire site.
+   Change a value here and every component updates. Nothing else hardcodes
+   a colour, a font, or a size.
+
+   PALETTE: "Counsel" — a Pantone-anchored system.
+
+   Anchors below are the published hex conversions of real Pantone Coated
+   colours. The "paper", "hover" and "line" values are tints/shades derived
+   from those anchors (Pantone spot colours have no exact digital equivalent,
+   so derived steps are the honest way to build a screen ramp).
+
+     PANTONE 539 C        #00263A   Ink Navy      primary / authority
+     PANTONE 419 C        #212322   Graphite      headline text
+     PANTONE Cool Gray 11 #53565A   Slate         body & secondary text
+     PANTONE Cool Gray 1  #D9D9D6   Ash           hairlines on cool grounds
+     PANTONE 4515 C       #B3A369   Old Gold      accent ON NAVY only
+     PANTONE 871 C        #84754E   Antique Gold  accent ON PAPER only
+     PANTONE 7527 C       #D6D2C4   Parchment     warm rules & dividers
+     PANTONE 5455 C       #BFCED6   Pale Blue     quiet fills
+
+   WHY TWO GOLDS — this is the part worth not breaking:
+     #B3A369 on white is only 2.51:1 → fails WCAG AA, unreadable.
+     #B3A369 on Ink Navy is  6.24:1 → passes AA comfortably.
+     #84754E on paper white is 4.53:1 → passes AA for body text.
+   So gold-on-dark and gold-on-light are deliberately different swatches.
+   If you swap one, re-check it at https://webaim.org/resources/contrastchecker/
+============================================================================ */
+
+:root {
+  /* ---- 1. RAW PANTONE ANCHORS -------------------------------------------
+     Don't reference these directly in components. Use the semantic names
+     in section 2 instead, so a rebrand is a six-line edit.               */
+  --pms-539:      #00263A;
+  --pms-419:      #212322;
+  --pms-cool-11:  #53565A;
+  --pms-cool-1:   #D9D9D6;
+  --pms-4515:     #B3A369;
+  --pms-871:      #84754E;
+  --pms-7527:     #D6D2C4;
+  --pms-5455:     #BFCED6;
+
+  /* Derived steps (tints & shades of the anchors above) */
+  --navy-deep:    #001B29;  /* 539 C shaded ~25% — footer, hero base       */
+  --navy-raised:  #0A3350;  /* 539 C tinted ~12% — cards on navy, hovers   */
+  --paper:        #FAF9F6;  /* 7527 C at ~12% tint — page ground           */
+  --paper-raised: #FFFFFF;  /* pure white — cards lifting off the paper    */
+  --gold-soft:    #C9BC8C;  /* 4515 C tinted ~20% — hover state on navy    */
+
+  /* ---- 2. SEMANTIC COLOUR ROLES -----------------------------------------
+     Components only ever use these. Rebrand = change this block.        */
+  --c-bg:              var(--paper);
+  --c-bg-raised:       var(--paper-raised);
+  --c-bg-inverse:      var(--pms-539);
+  --c-bg-inverse-deep: var(--navy-deep);
+  --c-bg-inverse-up:   var(--navy-raised);
+
+  --c-heading:         var(--pms-419);
+  --c-body:            var(--pms-cool-11);
+  --c-heading-inverse: #FFFFFF;
+  --c-body-inverse:    #C3CDD4;   /* 5455 C shaded — 8.2:1 on Ink Navy    */
+
+  --c-accent:          var(--pms-871);    /* gold on light grounds        */
+  --c-accent-inverse:  var(--pms-4515);   /* gold on navy grounds         */
+  --c-accent-hover:    var(--gold-soft);
+
+  --c-line:            var(--pms-7527);   /* dividers on paper            */
+  --c-line-soft:       #E8E5DD;           /* 7527 C at ~35% — faint rules */
+  --c-line-inverse:    rgba(179, 163, 105, 0.28);
+
+  --c-focus:           var(--pms-871);
+  --c-focus-inverse:   var(--pms-4515);
+
+  /* ---- 3. TYPEFACES ------------------------------------------------------
+     EB Garamond — old-style serif. Bookish and traditional; the law-library
+                   register rather than the corporate-firm one.
+     Inter       — neutral UI sans for body, labels, navigation.
+     Both carry full fallback stacks so the page still reads correctly if
+     Google Fonts is blocked or offline.
+
+     ⚠ If you swap the display face, re-check section 4. EB Garamond has a
+     noticeably smaller x-height than most serifs, so the display sizes below
+     are set ~8% larger and the tracking is looser than they'd be for, say,
+     Source Serif 4. Change the font without changing those and headings will
+     look undersized and cramped.                                         */
+  --font-display: "EB Garamond", Garamond, Georgia,
+                  "Times New Roman", Times, serif;
+  --font-body:    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+                  Roboto, Helvetica, Arial, sans-serif;
+
+  /* ---- 4. TYPE SCALE -----------------------------------------------------
+     Fluid via clamp(): min / preferred(viewport-relative) / max.
+     No media queries needed — it scales smoothly from 320px to 1600px.  */
+  /* Display sizes carry an ~8% uplift for EB Garamond's small x-height.
+     Divide back out if you move to a larger-eyed serif. */
+  --t-hero:    clamp(2.95rem, 1.72rem + 5.6vw, 6.5rem);
+  --t-h2:      clamp(1.9rem, 1.35rem + 2.27vw, 2.95rem);
+  --t-h3:      clamp(1.22rem, 1.06rem + 0.64vw, 1.48rem);
+  --t-lead:    clamp(1.05rem, 0.97rem + 0.42vw, 1.3rem);
+  --t-body:    1.0625rem;   /* 17px — comfortable long-form reading       */
+  --t-small:   0.9375rem;
+  --t-label:   0.75rem;     /* eyebrows / kickers, always letterspaced    */
+
+  --lh-tight:  1.06;
+  --lh-snug:   1.28;
+  --lh-body:   1.72;        /* generous — this is a text-led site         */
+
+  /* Old-style serifs are already narrow and tightly fitted, so they need far
+     less negative tracking than a transitional face. These are deliberately
+     looser than the -0.022 / -0.014 that suited Source Serif 4. */
+  --ls-hero:   -0.012em;
+  --ls-h2:     -0.007em;
+  --ls-label:  0.16em;      /* small caps need lots of air                */
+
+  /* ---- 5. SPACING (8px base) -------------------------------------------- */
+  --s-1:  0.5rem;
+  --s-2:  1rem;
+  --s-3:  1.5rem;
+  --s-4:  2rem;
+  --s-5:  3rem;
+  --s-6:  4rem;
+  --s-7:  6rem;
+  --s-section: clamp(4.5rem, 3rem + 7vw, 9rem);  /* vertical section rhythm */
+
+  /* ---- 6. LAYOUT --------------------------------------------------------- */
+  /* Outer container. This is what sets the left edge of everything — the
+     container is centred, so a narrower page pushes content further in.
+     Raised from 1180px because the hero was sitting too far right on wide
+     screens. Only affects viewports above ~1440px; below that the gutter
+     governs and nothing moves. Prose stays readable regardless because
+     --w-text caps the measure independently. */
+  --w-page:   1340px;   /* outer container                                  */
+  --w-text:   68ch;     /* max measure for prose — never let lines run wide */
+  --w-narrow: 780px;
+  --gutter:   clamp(1.25rem, 0.7rem + 2.6vw, 3rem);
+  --header-h: 72px;
+
+  /* ---- 7. MOTION ---------------------------------------------------------
+     Tuned deliberately slow and generous — longer durations, more travel,
+     wider stagger. This is a bigger, more cinematic feel than the tighter
+     150–400ms band Nielsen Norman Group recommends for scroll reveals; the
+     tradeoff is that fast scrollers can outrun the animation and see content
+     still arriving. Dial --dur-reveal and --reveal-lift down together if it
+     ever starts to feel sluggish rather than considered.
+
+     Everything here is switched off under prefers-reduced-motion.
+
+     INTERACTION speeds (--dur-fast / --dur-base) are deliberately NOT slowed.
+     Hovers and menu toggles are feedback, not choreography — stretch those
+     and the site feels laggy rather than elegant.                        */
+  --dur-fast:   160ms;   /* hover feedback — keep snappy                   */
+  --dur-base:   260ms;   /* menus, header state — keep snappy              */
+  --dur-reveal: 1000ms;  /* scroll reveals                                 */
+
+  /* Expo-out. Quick departure, long graceful settle — reads as weight and
+     deliberation. Much more pronounced than a standard ease-out. */
+  --ease-out:   cubic-bezier(0.16, 1, 0.30, 1);
+  --ease-soft:  cubic-bezier(0.4, 0.0, 0.2, 1);
+
+  --reveal-lift: 34px;   /* how far elements travel up                     */
+  --stagger:     115ms;  /* delay between sibling reveals                  */
+
+  /* ---- 8. HERO MONOGRAM --------------------------------------------------
+     The oversized "A" behind the hero. Geometry lives in the inline <svg>
+     in index.html; these two values control how it reads.
+
+       --monogram-ink       the colour of the shapes
+       --monogram-strength  overall intensity (a multiplier — the four shapes
+                            keep their relative weights of .25/.35/.5/.6)
+
+     The four shapes are nested, so each one deepens the tone toward the
+     centre. With a DARK ink each nested shape reads darker than the last
+     (debossed, as drawn in Figma); with a LIGHT ink the stack runs the other
+     way. Same geometry either way — only the direction changes.
+
+     The hero's ground under the monogram runs #002031 at the top of the
+     section to #001B29 at the bottom. Measured against that, the densest
+     overlap moves the pixel by:
+
+       black          @ 0.30   Δ13 top / Δ11 bottom  ← default, debossed
+       PANTONE 5455 C @ 0.07   Δ12 / Δ12             raised instead of recessed
+       white          @ 0.05   Δ12 / Δ12             same weight, but
+                                                     desaturates navy to grey
+       #001C2C        @ 0.60   Δ3  / Δ1              the raw Figma values.
+                                                     Invisible — that artboard
+                                                     was #022437, much lighter
+                                                     than the real hero here.
+
+     Black is the safest dark: scaling all channels down preserves the navy
+     hue, where white flattens it toward grey.
+
+     --monogram-strength scales all four shapes at once; they keep their
+     relative weights (.25 / .35 / .5 / .6). Lower it for subtler.
+     Use _tuner.html to judge it against the real hero.
+  ------------------------------------------------------------------------ */
+  --monogram-ink:      #000000;
+  --monogram-strength: 0.30;
+
+  /* ---- 9. MISC ----------------------------------------------------------- */
+  --radius:      2px;    /* near-square. Rounded corners read casual.      */
+  --radius-img:  3px;
+  --rule:        1px;
+  --shadow-nav:  0 1px 0 var(--c-line), 0 8px 28px rgba(0, 38, 58, 0.06);
+}

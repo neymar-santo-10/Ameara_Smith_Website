@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- ==========================================================================
+     AMEARA SMITH — personal site
+     --------------------------------------------------------------------------
+     HOW TO EDIT THIS PAGE
+       · All the words live in this file. Change them right here.
+       · All the colours, fonts and sizes live in assets/css/tokens.css.
+       · Layout rules live in assets/css/styles.css.
+       · Animation behaviour lives in assets/js/main.js.
+       · Anything marked "TODO" in a comment needs a real value before launch.
+
+     ADDING A NEW JOB / SCHOOL / SECTION
+       Copy an existing <li> or <section> block and edit it. The stagger
+       animation is assigned automatically — you don't need to number anything.
+========================================================================== -->
+
+<title>Ameara Smith — International Relations &amp; Law</title>
+<meta name="description" content="Ameara Smith is an international relations student at Georgetown University's School of Foreign Service, working toward a career in law at the intersection of gender justice, human rights, and public policy.">
+<meta name="author" content="Ameara Smith">
+
+<!-- Update all four absolute URLs below together if the site moves to a
+     custom domain (they must be absolute — relative URLs are invalid here). -->
+<link rel="canonical" href="https://neymar-santo-10.github.io/Ameara_Smith_Website/">
+
+<!-- Social share preview -->
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Ameara Smith — International Relations &amp; Law">
+<meta property="og:description" content="Georgetown University, School of Foreign Service. Gender justice, human rights, and public policy.">
+<meta property="og:url" content="https://neymar-santo-10.github.io/Ameara_Smith_Website/">
+<!-- Points at the portrait so previews aren't broken. It's a 2:3 portrait,
+     so "summary" (square thumbnail) suits it better than a wide banner.
+     TODO: make a 1200x630 og-image.jpg, then point og:image at it and switch
+     twitter:card back to summary_large_image. -->
+<meta property="og:image" content="https://neymar-santo-10.github.io/Ameara_Smith_Website/assets/img/ameara-smith.jpg">
+<meta name="twitter:card" content="summary">
+
+<meta name="theme-color" content="#00263A">
+
+<!-- Typefaces. Source Serif 4 for display, Inter for text.
+     If you ever go offline-only, self-host these and delete these 3 lines. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400..800&family=Inter:ital,wght@0,100..900;1,100..900&display=swap">
+
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/styles.css">
+
+<!-- Swaps no-js → js before first paint, so reveal elements never flash. -->
+<script>document.documentElement.className = 'js';</script>
+</head>
+
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ======================================================================
+     HEADER
+====================================================================== -->
+<header class="site-header" id="header">
+  <div class="container">
+    <a class="brand" href="#top">Ameara <span class="brand__last">Smith</span></a>
+
+    <button class="nav-toggle" type="button"
+            aria-expanded="false" aria-controls="nav" aria-label="Menu">
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+    </button>
+
+    <nav class="nav" id="nav" aria-label="Primary">
+      <a class="nav__link" href="#about">About</a>
+      <a class="nav__link" href="#focus">Focus</a>
+      <a class="nav__link" href="#experience">Experience</a>
+      <a class="nav__link" href="#education">Education</a>
+      <a class="nav__link" href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ======================================================================
+     HERO
+     The name animates up behind a mask on load; everything else fades in
+     after it. This is the only pronounced animation on the site.
+====================================================================== -->
+<section class="hero on-navy" id="top">
+
+  <!-- Monogram "A". Geometry from the Figma frame; colour and intensity come
+       from --monogram-ink / --monogram-strength in tokens.css.
+       The four shapes keep their relative weights via fill-opacity, so the
+       strength token scales the whole group without flattening it.
+
+       preserveAspectRatio is xMaxYMid: the artwork is anchored to the RIGHT
+       edge. With the default xMidYMid, a viewport narrower than the 1703:864
+       artboard crops both sides evenly and cuts the monogram off — it lives
+       at 72–95% across. Do not change this to xMidYMid.
+
+       The flat background <rect> from the Figma export is deliberately gone;
+       the hero's own gradient is the ground, which is richer than a solid. -->
+  <svg class="hero__monogram" viewBox="0 0 1703 864"
+       preserveAspectRatio="xMaxYMid slice" aria-hidden="true" focusable="false">
+    <g class="hero__monogram-ink">
+      <path fill-opacity=".25" d="M1199.38 -94H1653L2114 957H731L1199.38 -94Z"/>
+      <path fill-opacity=".35" d="M1257.47 47H1594L1936 828H910L1257.47 47Z"/>
+      <path fill-opacity=".5"  d="M1307.49 185H1542.33L1781 730H1065L1307.49 185Z"/>
+      <path fill-opacity=".6"  d="M1235.23 651L1362.73 301H1482.73L1609.73 651H1495.73L1476.23 588.5H1365.73L1346.23 651H1235.23ZM1387.23 505H1454.23L1421.23 405L1387.23 505Z"/>
+    </g>
+  </svg>
+
+  <div class="container">
+    <div class="hero__inner">
+
+      <p class="hero__kicker hero__fade" style="--d:0">International Relations &amp; Law</p>
+
+      <h1 class="hero__name">
+        <span class="line"><span class="line__inner" style="--d:0">Ameara</span></span>
+        <span class="line"><span class="line__inner" style="--d:1">Smith</span></span>
+      </h1>
+
+      <hr class="hero__rule">
+
+      <p class="hero__tagline hero__fade" style="--d:1">
+        Working toward a career in law at the intersection of gender justice,
+        human rights, and public policy.
+      </p>
+
+      <p class="hero__affil hero__fade" style="--d:2">
+        Georgetown University <span>·</span> School of Foreign Service <span>·</span> Class of 2028
+      </p>
+
+      <div class="hero__actions hero__fade" style="--d:3">
+        <a class="btn btn--solid" href="#experience">View experience</a>
+        <a class="btn btn--ghost" href="#contact">Get in touch</a>
+      </div>
+
+    </div>
+  </div>
+
+  <a class="hero__cue" href="#about" aria-label="Scroll to about">Scroll</a>
+</section>
+
+
+<!-- ======================================================================
+     ABOUT
+====================================================================== -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="about__grid">
+
+      <div data-reveal>
+        <!-- To swap the photo: drop a new file at assets/img/ameara-smith.jpg
+             and update width/height below to its real pixel size. A 4:5
+             portrait crop fits the frame with no cropping. -->
+        <figure class="portrait">
+          <div class="portrait__frame">
+            <img src="assets/img/ameara-smith.jpg"
+                 alt="Portrait of Ameara Smith"
+                 width="1100" height="1650"
+                 decoding="async">
+          </div>
+        </figure>
+      </div>
+
+      <div class="about__body">
+        <div class="section-head" data-reveal>
+          <span class="eyebrow">About</span>
+          <h2>A path to the law that started abroad.</h2>
+          <hr class="rule" data-reveal>
+        </div>
+
+        <div data-reveal-group>
+          <p data-reveal>
+            Ameara Smith is an international relations student at Georgetown
+            University's School of Foreign Service, where she is building toward
+            law school and a career in gender justice and human rights.
+          </p>
+
+          <p data-reveal>
+            Her introduction to the law came in Italy. She spent her eleventh-grade
+            year in Viterbo with School Year Abroad and interned for nine months at
+            <em>Studio Legale Perugi &amp; Celoni</em>, observing case handling,
+            assisting with filings, and learning the Italian legal system from the
+            inside. She now speaks Italian at a professional working level.
+          </p>
+
+          <p data-reveal>
+            Back in Pennsylvania, she interned under the Honorable Jodi Griffis of
+            the Montgomery County District Court — sitting in on hearings, assisting
+            with case filings, and traveling to meet clients. At the National Women's
+            Law Center she spent ten months with the Education team, studying gender
+            justice advocacy in education policy and completing a capstone project on
+            menstrual equity that she presented to the Center's partners.
+          </p>
+
+          <p data-reveal>
+            At Georgetown she works in the university libraries, guides campus tours
+            with the Blue &amp; Gray Tour Guide Society, and is part of Students of
+            Georgetown, Inc. — the largest student-run nonprofit in the world.
+          </p>
+        </div>
+
+        <dl class="facts" data-reveal>
+          <div>
+            <dt>Focus</dt>
+            <dd>Gender justice · Human rights · Education policy</dd>
+          </div>
+          <div>
+            <dt>Education</dt>
+            <dd>Georgetown University<br>School of Foreign Service, 2028</dd>
+          </div>
+          <div>
+            <dt>Languages</dt>
+            <dd>English · Italian <span class="meta">(professional working)</span></dd>
+          </div>
+          <div>
+            <dt>Based in</dt>
+            <dd>Washington, D.C.<br>Norristown, Pennsylvania</dd>
+          </div>
+        </dl>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ======================================================================
+     FOCUS  — navy band, breaks up the page
+====================================================================== -->
+<section class="section on-navy" id="focus">
+  <div class="container">
+
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Areas of Focus</span>
+      <h2>Three threads, one throughline.</h2>
+      <hr class="rule" data-reveal>
+    </div>
+
+    <div class="cards" data-reveal-group>
+
+      <article class="card" data-reveal>
+        <span class="card__num">01</span>
+        <h3>Gender Justice &amp; Education Policy</h3>
+        <p>
+          Ten months with the National Women's Law Center's Education team,
+          studying how policy shapes gender equity in schools — including a
+          capstone on menstrual equity presented to the Center's partners.
+        </p>
+      </article>
+
+      <article class="card" data-reveal>
+        <span class="card__num">02</span>
+        <h3>International &amp; Comparative Law</h3>
+        <p>
+          Nine months inside an Italian law firm and a full academic year in
+          Viterbo. Working familiarity with Italian legal process, and
+          professional proficiency in the language.
+        </p>
+      </article>
+
+      <article class="card" data-reveal>
+        <span class="card__num">03</span>
+        <h3>Courts &amp; Public Service</h3>
+        <p>
+          A judicial internship in the Montgomery County District Court —
+          hearings, case filings, and client meetings alongside a sitting
+          district judge.
+        </p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ======================================================================
+     EXPERIENCE
+     To add a role: copy one <li class="entry"> block and edit it.
+====================================================================== -->
+<section class="section" id="experience">
+  <div class="container">
+    <div class="split">
+
+      <div class="split__aside">
+        <div class="section-head" data-reveal>
+          <span class="eyebrow">Experience</span>
+          <h2>Legal &amp; policy work.</h2>
+          <hr class="rule" data-reveal>
+          <p class="meta">
+            Roles in courts, civil-rights policy, and private practice —
+            in Washington, Pennsylvania, and Italy.
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <ol class="timeline" data-reveal-group>
+
+          <!-- TODO: VERIFY — this is drawn from Ameara's own announcement post,
+               not from the Experience section of her LinkedIn. Confirm the exact
+               job title and dates, or delete this block. -->
+          <li class="entry" data-reveal>
+            <div class="entry__head">
+              <h3 class="entry__role">Intern</h3>
+              <span class="entry__dates">Summer 2026</span>
+            </div>
+            <p class="entry__org">
+              Biblioteca delle Donne
+              <span class="sep">/</span><span class="place">L'Aquila, Italy</span>
+            </p>
+            <p>
+              Summer placement with a women's library and documentation centre,
+              continuing her work at the intersection of gender studies and Italian
+              civil society.
+            </p>
+          </li>
+
+          <li class="entry" data-reveal>
+            <div class="entry__head">
+              <h3 class="entry__role">Intern, Education Team</h3>
+              <span class="entry__dates tnum">Sep 2024 — Jun 2025</span>
+            </div>
+            <p class="entry__org">
+              National Women's Law Center
+              <span class="sep">/</span><span class="place">Washington, D.C.</span>
+            </p>
+            <p>
+              Trained across the Center's key policy priorities and worked with the
+              Education team on gender justice advocacy in education policy.
+              Completed a capstone project on menstrual equity and presented it to
+              partners at the law center.
+            </p>
+            <ul class="tags">
+              <li>Human Rights</li>
+              <li>Women's Issues</li>
+              <li>Policy Research</li>
+            </ul>
+          </li>
+
+          <li class="entry" data-reveal>
+            <div class="entry__head">
+              <h3 class="entry__role">Legal Intern</h3>
+              <span class="entry__dates tnum">Apr — May 2024</span>
+            </div>
+            <p class="entry__org">
+              Montgomery County District Court
+              <span class="sep">/</span><span class="place">Montgomery County, Pennsylvania</span>
+            </p>
+            <p>
+              Interned under District Judge the Honorable Jodi Griffis. Assisted with
+              filing cases, sat in on hearings, and traveled to meet clients.
+              Supported clerical work for the judge's private practice.
+            </p>
+            <ul class="tags">
+              <li>Case Filing</li>
+              <li>Court Procedure</li>
+            </ul>
+          </li>
+
+          <li class="entry" data-reveal>
+            <div class="entry__head">
+              <h3 class="entry__role">Legal Intern</h3>
+              <span class="entry__dates tnum">Sep 2022 — May 2023</span>
+            </div>
+            <p class="entry__org">
+              Studio Legale Perugi &amp; Celoni
+              <span class="sep">/</span><span class="place">Viterbo, Italy</span>
+            </p>
+            <p>
+              Interned under an Italian attorney across a nine-month placement.
+              Observed case handling, managed filings, and developed a working
+              knowledge of Italian legal process — in Italian.
+            </p>
+            <ul class="tags">
+              <li>Comparative Law</li>
+              <li>Italian</li>
+            </ul>
+          </li>
+
+          <li class="entry" data-reveal>
+            <div class="entry__head">
+              <h3 class="entry__role">Research &amp; Communications Intern</h3>
+              <span class="entry__dates tnum">Jun — Aug 2023</span>
+            </div>
+            <p class="entry__org">
+              Maven Communications
+              <span class="sep">/</span><span class="place">Philadelphia, Pennsylvania</span>
+            </p>
+            <p>
+              Produced a weekly monitoring report for the firm's clients — researching
+              each account, then interpreting and organising findings for company
+              leadership.
+            </p>
+            <ul class="tags">
+              <li>Research</li>
+              <li>Written Briefing</li>
+            </ul>
+          </li>
+
+        </ol>
+
+        <!-- ---- Secondary roles, kept compact so they don't crowd the above ---- -->
+        <div style="margin-top: var(--s-6)" data-reveal>
+          <span class="eyebrow">Additional Experience</span>
+          <ul class="compact">
+            <li><span class="r">Student Library Assistant</span> <span class="o">Georgetown University Library</span> <span class="d tnum">2025 —</span></li>
+            <li><span class="r">Employee</span> <span class="o">Students of Georgetown, Inc. (The Corp)</span> <span class="d tnum">2025 —</span></li>
+            <li><span class="r">Seasonal Sales Associate</span> <span class="o">Theory</span> <span class="d tnum">2025 —</span></li>
+            <li><span class="r">Sales Associate</span> <span class="o">Club Pilates</span> <span class="d tnum">2024 — 2025</span></li>
+            <li><span class="r">Retail Associate</span> <span class="o">Aerie by AEO, Inc.</span> <span class="d tnum">2023 — 2026</span></li>
+            <li><span class="r">Intern</span> <span class="o">First Tee — Greater Philadelphia</span> <span class="d tnum">2023</span></li>
+            <li><span class="r">Summer Camp Counselor</span> <span class="o">Springside Chestnut Hill Academy</span> <span class="d tnum">2021</span></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ======================================================================
+     EDUCATION
+====================================================================== -->
+<section class="section" id="education">
+  <div class="container">
+
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Education</span>
+      <h2>Washington, Viterbo, Philadelphia.</h2>
+      <hr class="rule" data-reveal>
+    </div>
+
+    <ul class="edu" data-reveal-group>
+
+      <li data-reveal>
+        <div class="edu__school">
+          <h3>Georgetown University</h3>
+          <span class="entry__dates tnum">2024 — 2028</span>
+        </div>
+        <p class="edu__degree">
+          B.S., International Relations and Affairs &nbsp;·&nbsp; School of Foreign Service
+          &nbsp;·&nbsp; Washington, D.C.
+        </p>
+        <ul class="honors">
+          <li>Blue &amp; Gray Tour Guide Society</li>
+          <li>Students of Georgetown, Inc.</li>
+        </ul>
+      </li>
+
+      <li data-reveal>
+        <div class="edu__school">
+          <h3>School Year Abroad — Italy</h3>
+          <span class="entry__dates tnum">2022 — 2023</span>
+        </div>
+        <p class="edu__degree">
+          Academic year abroad, eleventh grade &nbsp;·&nbsp; Viterbo, Italy
+        </p>
+        <p class="edu__note">
+          Studied in Italian alongside a nine-month law internship, and tutored
+          English locally.
+        </p>
+      </li>
+
+      <li data-reveal>
+        <div class="edu__school">
+          <h3>Springside Chestnut Hill Academy</h3>
+          <span class="entry__dates tnum">2012 — 2024</span>
+        </div>
+        <p class="edu__degree">
+          High School Diploma &nbsp;·&nbsp; Philadelphia, Pennsylvania
+          &nbsp;·&nbsp; GPA 4.3
+        </p>
+        <ul class="honors">
+          <li>Cum Laude Society</li>
+          <li>Varsity Tennis, Captain</li>
+          <li>Service Council</li>
+          <li>Student Facilitators</li>
+          <li>Black Student Union</li>
+          <li>Yearbook</li>
+        </ul>
+      </li>
+
+    </ul>
+  </div>
+</section>
+
+
+<!-- ======================================================================
+     SERVICE
+====================================================================== -->
+<section class="section" id="service">
+  <div class="container">
+
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Leadership &amp; Service</span>
+      <h2>Work outside the résumé.</h2>
+      <hr class="rule" data-reveal>
+    </div>
+
+    <ul class="service" data-reveal-group>
+
+      <li data-reveal>
+        <h3>Tour Guide</h3>
+        <span class="meta">Georgetown Blue &amp; Gray Tour Guide Society &nbsp;·&nbsp; 2025 —</span>
+        <p>
+          Leads campus tours for prospective students and families, building public
+          speaking and communication practice into the week.
+        </p>
+      </li>
+
+      <li data-reveal>
+        <h3>Alumni Interviewer</h3>
+        <span class="meta">School Year Abroad &nbsp;·&nbsp; 2025 — 2026</span>
+        <p>
+          Conducted admissions interviews for prospective SYA students, evaluated
+          candidates, and supported selection for the organisation's study abroad
+          programmes.
+        </p>
+      </li>
+
+    </ul>
+  </div>
+</section>
+
+
+<!-- ======================================================================
+     CONTACT
+====================================================================== -->
+<section class="section on-navy" id="contact">
+  <div class="container">
+    <div class="contact__grid">
+
+      <div>
+        <div class="section-head" data-reveal>
+          <span class="eyebrow">Contact</span>
+          <p class="contact__lead">
+            Open to conversations about legal internships, research assistantships,
+            and gender-justice policy work.
+          </p>
+          <hr class="rule" data-reveal>
+        </div>
+      </div>
+
+      <div data-reveal>
+        <dl class="channels">
+          <!-- TODO: EMAIL — swap in the real address in BOTH the href and the text. -->
+          <div>
+            <dt>Email</dt>
+            <dd><a class="link link--static" href="mailto:hello@example.com">hello@example.com</a></dd>
+          </div>
+          <div>
+            <dt>LinkedIn</dt>
+            <dd>
+              <a class="link link--static" href="https://www.linkedin.com/in/ameara-smith-89584923b/"
+                 target="_blank" rel="noopener">/in/ameara-smith</a>
+            </dd>
+          </div>
+          <div>
+            <dt>Location</dt>
+            <dd>Washington, D.C.</dd>
+          </div>
+          <!-- TODO: RÉSUMÉ — drop the PDF at assets/ameara-smith-resume.pdf,
+               or delete this row until there is one. -->
+          <div>
+            <dt>Résumé</dt>
+            <dd><a class="link link--static" href="assets/ameara-smith-resume.pdf">Download PDF</a></dd>
+          </div>
+        </dl>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+
+<!-- ======================================================================
+     FOOTER
+====================================================================== -->
+<footer class="site-footer">
+  <div class="container">
+    <p>&copy; <span id="year">2026</span> Ameara Smith</p>
+    <p><a class="link" href="#top">Back to top</a></p>
+
+    <!-- Keep this notice. See README — it is the standard safeguard for a
+         pre-law personal site, so the page can't be read as an offer of
+         legal services by someone not admitted to a bar. -->
+    <p class="disclaimer">
+      This is a personal portfolio site. Ameara Smith is an undergraduate student
+      and is not a licensed attorney. Nothing on this site is legal advice, an
+      offer to provide legal services, or an invitation to form an
+      attorney–client relationship.
+    </p>
+  </div>
+</footer>
+
+
+<!-- Structured data — helps Google show her correctly in search results. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Ameara Smith",
+  "url": "https://neymar-santo-10.github.io/Ameara_Smith_Website/",
+  "description": "International relations student at Georgetown University's School of Foreign Service, focused on gender justice, human rights, and public policy.",
+  "affiliation": {
+    "@type": "CollegeOrUniversity",
+    "name": "Georgetown University, School of Foreign Service"
+  },
+  "knowsLanguage": ["English", "Italian"],
+  "homeLocation": { "@type": "Place", "name": "Washington, D.C." },
+  "sameAs": ["https://www.linkedin.com/in/ameara-smith-89584923b/"]
+}
+</script>
+
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>
