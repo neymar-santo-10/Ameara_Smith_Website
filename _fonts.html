@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" class="js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Font switcher — dev only</title>
+
+<!-- =============================================================
+     DEV TOOL — not part of the site. Delete _fonts.html before deploying.
+
+     Real stylesheets, real hero, real section heading, real body copy.
+     Click a pairing, look at it, then paste the two lines it prints into
+     the TYPEFACES block in tokens.css.
+
+     Panel is bottom-left, draggable, collapsible, and H hides it.
+============================================================= -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400..800&family=Inter:wght@100..900&family=Inter+Tight:wght@100..900&family=Lora:wght@400..700&family=Newsreader:opsz,wght@6..72,200..800&family=Playfair+Display:wght@400..900&family=Source+Serif+4:opsz,wght@8..60,200..900&display=swap">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/styles.css">
+
+<style>
+  .panel {
+    position: fixed; z-index: 999; left: 16px; bottom: 16px; width: 300px;
+    background: #fff; border: 1px solid #D6D2C4; border-radius: 3px;
+    font: 13px/1.5 Inter, system-ui, sans-serif; color: #212322;
+    box-shadow: 0 10px 30px rgba(0,38,58,.22); user-select: none;
+  }
+  .panel.is-hidden { display: none; }
+  .panel__bar {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    padding: 11px 10px 11px 16px; cursor: grab; border-bottom: 1px solid #E8E5DD;
+  }
+  .panel__bar:active { cursor: grabbing; }
+  .panel h2 { font: 600 12px/1 Inter, sans-serif; letter-spacing: .14em;
+              text-transform: uppercase; color: #84754E; margin: 0; }
+  .panel__toggle { border: 1px solid #D9D9D6; background: #fff; border-radius: 2px;
+    width: 24px; height: 24px; line-height: 1; cursor: pointer;
+    font: 600 14px Inter, sans-serif; color: #53565A; flex: none; }
+  .panel__body { padding: 8px 16px 16px; }
+  .panel.is-collapsed .panel__body { display: none; }
+  .panel.is-collapsed .panel__bar { border-bottom: 0; }
+
+  .opt {
+    display: block; width: 100%; text-align: left; cursor: pointer;
+    border: 1px solid #D9D9D6; background: #fff; border-radius: 2px;
+    padding: 9px 11px; margin-bottom: 6px;
+  }
+  .opt[aria-pressed="true"] { border-color: #00263A; background: #00263A; }
+  .opt[aria-pressed="true"] .opt__n,
+  .opt[aria-pressed="true"] .opt__d { color: #fff; }
+  .opt__n { display: block; font: 600 13px Inter, sans-serif; color: #212322; }
+  .opt__d { display: block; font: 11px/1.35 Inter, sans-serif; color: #53565A; margin-top: 2px; }
+
+  .readout { margin-top: 12px; padding-top: 12px; border-top: 1px solid #E8E5DD;
+    font: 11.5px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: #53565A; white-space: pre-wrap; word-break: break-word; }
+  .readout b { color: #00263A; }
+  .hint { position: fixed; z-index: 999; left: 16px; bottom: 16px;
+          font: 11px Inter, sans-serif; color: #53565A; }
+</style>
+</head>
+<body class="is-loaded">
+
+<p class="hint" id="hint">press H to show the switcher</p>
+
+<div class="panel" id="panel">
+ <div class="panel__bar" id="bar">
+  <h2>Font switcher</h2>
+  <button class="panel__toggle" id="collapse" type="button" title="Collapse">–</button>
+ </div>
+ <div class="panel__body">
+  <div id="opts"></div>
+  <div class="readout" id="out"></div>
+ </div>
+</div>
+
+<section class="hero on-navy" id="top">
+  <svg class="hero__monogram" viewBox="0 0 1703 864"
+       preserveAspectRatio="xMaxYMid slice" aria-hidden="true" focusable="false">
+    <g class="hero__monogram-ink">
+      <path fill-opacity=".25" d="M1199.38 -94H1653L2114 957H731L1199.38 -94Z"/>
+      <path fill-opacity=".35" d="M1257.47 47H1594L1936 828H910L1257.47 47Z"/>
+      <path fill-opacity=".5"  d="M1307.49 185H1542.33L1781 730H1065L1307.49 185Z"/>
+      <path fill-opacity=".6"  d="M1235.23 651L1362.73 301H1482.73L1609.73 651H1495.73L1476.23 588.5H1365.73L1346.23 651H1235.23ZM1387.23 505H1454.23L1421.23 405L1387.23 505Z"/>
+    </g>
+  </svg>
+  <div class="container">
+    <div class="hero__inner">
+      <p class="hero__kicker">International Relations &amp; Law</p>
+      <h1 class="hero__name">
+        <span class="line"><span class="line__inner">Ameara</span></span>
+        <span class="line"><span class="line__inner">Smith</span></span>
+      </h1>
+      <hr class="hero__rule">
+      <p class="hero__tagline">
+        Working toward a career in law at the intersection of gender justice,
+        human rights, and public policy.
+      </p>
+      <p class="hero__affil">
+        Georgetown University <span>·</span> School of Foreign Service <span>·</span> Class of 2028
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn--solid" href="#">View experience</a>
+        <a class="btn btn--ghost" href="#">Get in touch</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">About</span>
+      <h2>A path to the law that started abroad.</h2>
+      <hr class="rule is-visible">
+    </div>
+    <p>
+      Her introduction to the law came in Italy. She spent her eleventh-grade year
+      in Viterbo with School Year Abroad and interned for nine months at
+      <em>Studio Legale Perugi &amp; Celoni</em>, observing case handling, assisting
+      with filings, and learning the Italian legal system from the inside.
+    </p>
+    <ul class="compact" style="margin-top:2rem;max-width:68ch">
+      <li><span class="r">Intern, Education Team</span> <span class="o">National Women's Law Center</span> <span class="d tnum">2024 — 2025</span></li>
+      <li><span class="r">Legal Intern</span> <span class="o">Montgomery County District Court</span> <span class="d tnum">2024</span></li>
+    </ul>
+  </div>
+</section>
+
+<script>
+(function () {
+  var PAIRS = [
+    { n: 'EB Garamond  (current)', d: 'Old-style. Law library, bookish, warmer. Small x-height — the live site compensates with ~8% larger display sizes.',
+      f: '"EB Garamond", Garamond, Georgia, serif' },
+    { n: 'Source Serif 4', d: 'Transitional serif. Institutional, neutral, safe. Larger-eyed, so it will look oversized here until you undo the uplift.',
+      f: '"Source Serif 4", "Source Serif Pro", Georgia, serif' },
+    { n: 'Newsreader', d: 'Contemporary editorial serif. More character, still sober.',
+      f: '"Newsreader", Georgia, serif' },
+    { n: 'Lora', d: 'Warm, slightly calligraphic. Approachable rather than austere.',
+      f: '"Lora", Georgia, serif' },
+    { n: 'Playfair Display', d: 'High contrast, editorial-fashion. Striking but less institutional.',
+      f: '"Playfair Display", Georgia, serif' },
+    { n: 'Inter Tight  (all-sans)', d: 'No serif anywhere. Reads think-tank / policy shop, not old law firm.',
+      f: '"Inter Tight", Inter, system-ui, sans-serif' }
+  ];
+
+  var root = document.documentElement, out = document.getElementById('out');
+  var wrap = document.getElementById('opts'), active = 0;
+
+  PAIRS.forEach(function (p, i) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'opt';
+    b.setAttribute('aria-pressed', String(i === 0));
+    b.innerHTML = '<span class="opt__n"></span><span class="opt__d"></span>';
+    b.querySelector('.opt__n').textContent = p.n;
+    b.querySelector('.opt__d').textContent = p.d;
+    b.addEventListener('click', function () { active = i; render(); });
+    wrap.appendChild(b);
+  });
+
+  function render() {
+    var p = PAIRS[active];
+    root.style.setProperty('--font-display', p.f);
+    [].forEach.call(wrap.children, function (b, i) {
+      b.setAttribute('aria-pressed', String(i === active));
+    });
+    out.innerHTML = 'paste into tokens.css:\n\n--font-display: <b>' + p.f
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</b>;\n'
+      + '--font-body: "Inter", -apple-system, …;   (unchanged)';
+  }
+  render();
+
+  // panel: drag / collapse / H to hide  (same behaviour as _tuner.html)
+  var panel = document.getElementById('panel'), bar = document.getElementById('bar');
+  var hint = document.getElementById('hint');
+  var store = {
+    get: function () { try { return JSON.parse(localStorage.fontpanel || '{}'); } catch (e) { return {}; } },
+    set: function (o) { try { localStorage.fontpanel = JSON.stringify(o); } catch (e) {} }
+  };
+  function apply(st) {
+    panel.classList.toggle('is-collapsed', !!st.collapsed);
+    panel.classList.toggle('is-hidden', !!st.hidden);
+    hint.style.display = st.hidden ? '' : 'none';
+    document.getElementById('collapse').textContent = st.collapsed ? '+' : '–';
+    if (st.left != null) { panel.style.left = st.left + 'px'; panel.style.top = st.top + 'px'; panel.style.bottom = 'auto'; }
+  }
+  var state = store.get(); apply(state);
+  document.getElementById('collapse').addEventListener('click', function () {
+    state.collapsed = !state.collapsed; store.set(state); apply(state);
+  });
+  document.addEventListener('keydown', function (e) {
+    if ((e.key === 'h' || e.key === 'H') && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) {
+      state.hidden = !state.hidden; store.set(state); apply(state);
+    }
+  });
+  var drag = null;
+  bar.addEventListener('pointerdown', function (e) {
+    if (e.target.closest('.panel__toggle')) return;
+    var r = panel.getBoundingClientRect();
+    drag = { dx: e.clientX - r.left, dy: e.clientY - r.top };
+    bar.setPointerCapture(e.pointerId);
+  });
+  bar.addEventListener('pointermove', function (e) {
+    if (!drag) return;
+    state.left = Math.max(0, Math.min(innerWidth - panel.offsetWidth, e.clientX - drag.dx));
+    state.top  = Math.max(0, Math.min(innerHeight - panel.offsetHeight, e.clientY - drag.dy));
+    apply(state);
+  });
+  bar.addEventListener('pointerup', function () { drag = null; store.set(state); });
+})();
+</script>
+</body>
+</html>
